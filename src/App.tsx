@@ -1,10 +1,20 @@
 import "./App.css";
+import htmlSvg from "./assets/html.svg"
 
 function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </>
+    <div>
+      <div>
+        <h1>Welcome to the FrontEnd quiz!</h1>
+        <p>Pick a subject to get started.</p>
+      </div>
+
+      <div>
+        <div className="flex items-center">
+          <img className="w-10 h-10" src={htmlSvg} alt="img html"/> <p>HTML</p>
+        </div>
+      </div>
+    </div>
   );
 }
 
