@@ -5,9 +5,31 @@ import { SiTypescript } from "react-icons/si";
 import { Switch } from "@headlessui/react";
 import Question from "./components/Question";
 import { useState } from "react";
+import { useEffect } from "react";
+import api from "./service/service"
+
+interface quiz{
+  id:number,
+  titulo:string;
+}
 
 const App = () => {
   const [enabled, setEnabled] = useState(false);
+  const [quiz, setquiz] = useState<quiz[]>([]);
+
+  const buscar = async () =>{
+     try{
+       const response = await api.get('/quizzes')
+       console.log(response.data)
+       setquiz(response.data)
+     }catch(error){
+        console.log(error)
+     }
+  }
+
+  useEffect(()=>{
+    buscar()
+  },[])
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white px-6">
@@ -52,6 +74,19 @@ const App = () => {
           </button>
         ))}
         {/* <Question nome="HTML" icon={<FaHtml5 />}/> */}
+        {quiz.length > 0 && (
+            quiz.map((quiz)=>(
+              <button
+            key={quiz.id}
+            className="flex cursor-pointer items-center w-full p-4 bg-gray-800 rounded-lg shadow-md hover:bg-gray-700 transition"
+          >
+            {/* <span className="mr-3 text-2xl">{item.icon}</span> */}
+            <span className="text-lg font-medium">{quiz.titulo}</span>
+          </button>
+            )) 
+
+            )
+        }
       </div>
     </div>
   );
