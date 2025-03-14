@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     element: <App />
   },
   {
-    path: "/quiz",
+    path: "/quiz/:id",
     element: <Quiz />
   },
   {

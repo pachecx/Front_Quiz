@@ -7,6 +7,7 @@ import Question from "./components/Question";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "./service/service"
+import { useNavigate } from "react-router-dom";
 
 interface quiz{
   id:number,
@@ -16,7 +17,7 @@ interface quiz{
 const App = () => {
   const [enabled, setEnabled] = useState(false);
   const [quiz, setquiz] = useState<quiz[]>([]);
-
+  const navigate = useNavigate()
   const buscar = async () =>{
      try{
        const response = await api.get('/quizzes')
@@ -56,7 +57,7 @@ const App = () => {
 
       {/* Quiz Options */}
       <div className="mt-6 w-full max-w-xs space-y-4">
-        {[
+        {/* {[
           { label: "HTML", icon: <FaHtml5 className="text-orange-500" /> },
           { label: "CSS", icon: <FaCss3Alt className="text-blue-500" /> },
           { label: "Javascript", icon: <FaJs className="text-yellow-500" /> },
@@ -72,12 +73,13 @@ const App = () => {
             <span className="mr-3 text-2xl">{item.icon}</span>
             <span className="text-lg font-medium">{item.label}</span>
           </button>
-        ))}
+        ))} */}
         {/* <Question nome="HTML" icon={<FaHtml5 />}/> */}
         {quiz.length > 0 && (
             quiz.map((quiz)=>(
               <button
             key={quiz.id}
+              onClick={()=> navigate(`/quiz/${quiz.id}`)}
             className="flex cursor-pointer items-center w-full p-4 bg-gray-800 rounded-lg shadow-md hover:bg-gray-700 transition"
           >
             {/* <span className="mr-3 text-2xl">{item.icon}</span> */}
