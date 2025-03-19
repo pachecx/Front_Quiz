@@ -1,63 +1,59 @@
-import { FaHtml5, FaCss3Alt, FaJs, FaUniversalAccess } from "react-icons/fa";
+import { FaHtml5, FaCss3Alt, FaJs } from "react-icons/fa";
 import { BiLogoTypescript } from "react-icons/bi";
-import { SiTypescript } from "react-icons/si";
-
 import { Switch } from "@headlessui/react";
-import Question from "./components/Question";
-import { useState } from "react";
-import { useEffect } from "react";
-import api from "./service/service"
-import { useNavigate } from "react-router-dom";
-
-interface quiz{
-  id:number,
-  titulo:string;
-}
+import { useState, useEffect } from "react";
 
 const App = () => {
-  const [enabled, setEnabled] = useState(false);
-  const [quiz, setquiz] = useState<quiz[]>([]);
-  const navigate = useNavigate()
-  const buscar = async () =>{
-     try{
-       const response = await api.get('/quizzes')
-       console.log(response.data)
-       setquiz(response.data)
-     }catch(error){
-        console.log(error)
-     }
-  }
+  // Verifica o tema salvo no localStorage
+  const [enabled, setEnabled] = useState(() => {
+    return localStorage.getItem("theme") === "light";
+  });
 
-  useEffect(()=>{
-    buscar()
-  },[])
+  // Atualiza o tema ao mudar o switch
+  useEffect(() => {
+    if (enabled) {
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+      localStorage.setItem("theme", "dark");
+    }
+  }, [enabled]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white px-6">
+    <div className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-300 
+      ${enabled ? "bg-white text-black" : "bg-gray-900 text-white"} px-6`}
+    >
       {/* Toggle Theme Switch */}
       <div className="absolute top-4 right-4 flex items-center">
         <Switch
-          className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-700 transition data-[checked]:bg-blue-600"
           checked={enabled}
           onChange={setEnabled}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
+            enabled ? "bg-gray-300" : "bg-purple-700"
+          }`}
         >
-          <span className="sr-only" aria-hidden="true">
-            Toggle Theme
-          </span>
-          <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
+          <span className="sr-only">Toggle Theme</span>
+          <span
+            className={`size-4 transform rounded-full bg-white transition ${
+              enabled ? "translate-x-6" : "translate-x-1"
+            }`}
+          />
         </Switch>
       </div>
 
       {/* Title */}
       <h1 className="text-3xl font-bold text-center">
-        Welcome to the <br />{" "}
+        Welcome to the <br />
         <span className="text-blue-400">Frontend Quiz!</span>
       </h1>
-      <p className="text-gray-400 mt-2">Pick a subject to get started.</p>
+      <p className="mt-2 text-gray-500">Pick a subject to get started.</p>
 
       {/* Quiz Options */}
       <div className="mt-6 w-full max-w-xs space-y-4">
-        {/* {[
+        {[
           { label: "HTML", icon: <FaHtml5 className="text-orange-500" /> },
           { label: "CSS", icon: <FaCss3Alt className="text-blue-500" /> },
           { label: "Javascript", icon: <FaJs className="text-yellow-500" /> },
@@ -68,27 +64,14 @@ const App = () => {
         ].map((item, index) => (
           <button
             key={index}
-            className="flex cursor-pointer items-center w-full p-4 bg-gray-800 rounded-lg shadow-md hover:bg-gray-700 transition"
+            className={`flex cursor-pointer items-center w-full p-4 rounded-lg shadow-md transition ${
+              enabled ? "bg-gray-200 hover:bg-gray-300" : "bg-gray-800 hover:bg-gray-700"
+            }`}
           >
             <span className="mr-3 text-2xl">{item.icon}</span>
             <span className="text-lg font-medium">{item.label}</span>
           </button>
-        ))} */}
-        {/* <Question nome="HTML" icon={<FaHtml5 />}/> */}
-        {quiz.length > 0 && (
-            quiz.map((quiz)=>(
-              <button
-            key={quiz.id}
-              onClick={()=> navigate(`/quiz/${quiz.id}`)}
-            className="flex cursor-pointer items-center w-full p-4 bg-gray-800 rounded-lg shadow-md hover:bg-gray-700 transition"
-          >
-            {/* <span className="mr-3 text-2xl">{item.icon}</span> */}
-            <span className="text-lg font-medium">{quiz.titulo}</span>
-          </button>
-            )) 
-
-            )
-        }
+        ))}
       </div>
     </div>
   );
