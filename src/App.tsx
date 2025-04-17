@@ -1,13 +1,40 @@
 import { FaHtml5, FaCss3Alt, FaJs } from "react-icons/fa";
 import { BiLogoTypescript } from "react-icons/bi";
 import { Switch } from "@headlessui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import service from "./service/service";
+import Icon from "./assets/icon.svg";
+import { useNavigate } from "react-router-dom";
+
+interface Quiz{
+  id: string;
+  titulo: string;
+}
 
 const App = () => {
+  const navigate = useNavigate()
   // Verifica o tema salvo no localStorage
   const [enabled, setEnabled] = useState(() => {
     return localStorage.getItem("theme") === "light";
   });
+
+  const [quiz, setQuiz] = useState<Quiz[]>([{
+    id: "",
+    titulo: ""
+  }]);
+
+  const pegarQuiz = useCallback(async () => {
+    try {
+      const response = await service.get(`/quizzes`);
+      setQuiz(response.data)
+
+      console.log(quiz);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  
 
   // Atualiza o tema ao mudar o switch
   useEffect(() => {
@@ -20,7 +47,10 @@ const App = () => {
       document.documentElement.classList.remove("light");
       localStorage.setItem("theme", "dark");
     }
-  }, [enabled]);
+
+    pegarQuiz()
+
+  }, [enabled, pegarQuiz]);
 
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-300 
@@ -53,7 +83,7 @@ const App = () => {
 
       {/* Quiz Options */}
       <div className="mt-6 w-full max-w-xs space-y-4">
-        {[
+        {/* {[
           { label: "HTML", icon: <FaHtml5 className="text-orange-500" /> },
           { label: "CSS", icon: <FaCss3Alt className="text-blue-500" /> },
           { label: "Javascript", icon: <FaJs className="text-yellow-500" /> },
@@ -71,7 +101,19 @@ const App = () => {
             <span className="mr-3 text-2xl">{item.icon}</span>
             <span className="text-lg font-medium">{item.label}</span>
           </button>
-        ))}
+        ))} */}
+          {quiz.map((qui) => (
+            <button
+              key={qui.id}
+              onClick={() => navigate(`/quiz/${qui.id}`)}
+              className={`flex cursor-pointer items-center w-full p-4 rounded-lg shadow-md transition ${
+              enabled ? "bg-gray-200 hover:bg-gray-300" : "bg-gray-800 hover:bg-gray-700"
+            }`}
+          >
+            <img src={Icon} className="mr-3 h-8 w-8"></img>
+            <span className="text-lg font-medium">{qui.titulo}</span>
+          </button>
+          ))}
       </div>
     </div>
   );

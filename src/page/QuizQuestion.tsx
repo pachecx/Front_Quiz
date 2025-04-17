@@ -21,7 +21,7 @@ const QuizQuestion = () => {
     pegarQuestoes()
   }, [pegarQuestoes])
 
-  console.log(dados)
+  console.log(id)
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white px-4">
