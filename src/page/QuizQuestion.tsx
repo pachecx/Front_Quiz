@@ -1,73 +1,141 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { FaUniversalAccess } from "react-icons/fa";
-import { Switch } from "@headlessui/react";
-import api from "../service/service"
-import { useParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import quizData from "../mock/Quiz";
 
 const QuizQuestion = () => {
-  const {id} = useParams()
-  const [dados, setdados] = useState([])
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
 
-  const pegarQuestoes = useCallback( async () => {
-    try {
-      const response = await api.get(`/perguntas/quiz/${id}`)
-      setdados(response.data[0])
-    } catch (error) {
-      console.log(error)
+  const selectedQuiz = useMemo(() => quizData.find((item) => item.id === id), [id]);
+
+  if (!selectedQuiz) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-900 px-4 text-slate-100">
+        <div className="w-full max-w-md rounded-xl bg-slate-800 p-6 text-center">
+          <h1 className="text-2xl font-bold">Tema nao encontrado</h1>
+          <button
+            onClick={() => navigate("/")}
+            className="mt-4 cursor-pointer rounded-lg bg-cyan-500 px-4 py-2 font-semibold text-slate-900"
+          >
+            Voltar para inicio
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const currentQuestion = selectedQuiz.questions[currentIndex];
+  const totalQuestions = selectedQuiz.questions.length;
+  const progress = ((currentIndex + 1) / totalQuestions) * 100;
+  const selectedAnswer = answers[currentQuestion.id];
+  const isLastQuestion = currentIndex === totalQuestions - 1;
+
+  const selectOption = (option: string) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [currentQuestion.id]: option,
+    }));
+  };
+
+  const goNext = () => {
+    if (!selectedAnswer) {
+      return;
     }
-  }, [id])
 
-  useEffect(()=>{
-    pegarQuestoes()
-  }, [pegarQuestoes])
+    if (isLastQuestion) {
+      navigate("/result", {
+        state: {
+          quizId: selectedQuiz.id,
+          quizTitle: selectedQuiz.title,
+          answers,
+        },
+      });
+      return;
+    }
 
-  console.log(id)
+    setCurrentIndex((prev) => prev + 1);
+  };
+
+  const goPrevious = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white px-4">
-      <div className="w-full max-w-sm bg-gray-800 p-6 rounded-lg shadow-lg">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center space-x-2">
-            <FaUniversalAccess className="text-purple-500 text-2xl" />
-            <span className="text-lg font-medium">Accessibility</span>
+    <div className="min-h-screen bg-slate-900 px-4 py-6 text-slate-100 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-3xl rounded-2xl bg-slate-800/80 p-5 shadow-xl sm:p-8">
+        <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-sm text-slate-300">Tema selecionado</p>
+            <h1 className="text-2xl font-bold sm:text-3xl">{selectedQuiz.title}</h1>
           </div>
-          {/* <Switch className="relative inline-flex h-5 w-10 items-center rounded-full bg-gray-700">
-            <span className="sr-only">Toggle Theme</span>
-            <span className="inline-block h-3.5 w-3.5 transform rounded-full bg-white transition" />
-          </Switch> */}
+          <button
+            onClick={() => navigate("/")}
+            className="cursor-pointer rounded-lg border border-slate-600 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700"
+          >
+            Trocar tema
+          </button>
         </div>
 
-        {/* Question */}
-        <p className="text-gray-400 italic">Question 6 of 10</p>
-        <h2 className="mt-2 text-lg font-semibold">
-          Which of these color contrast ratios defines the minimum WCAG 2.1 Level AA requirement for normal text?
+        <p className="text-sm font-medium text-cyan-400">
+          Pergunta {currentIndex + 1} de {totalQuestions}
+        </p>
+        <h2 className="mt-2 text-lg font-semibold leading-relaxed sm:text-2xl">
+          {currentQuestion.question}
         </h2>
-        
-        {/* Progress Bar */}
-        <div className="mt-4 w-full h-1 bg-gray-700 rounded-full">
-          <div className="h-1 bg-purple-500 w-3/5 rounded-full"></div>
+
+        <div className="mt-5 h-2 w-full rounded-full bg-slate-700">
+          <div
+            className="h-2 rounded-full bg-cyan-500 transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
         </div>
 
-        {/* Answer Choices */}
-        <div className="mt-4 space-y-2">
-          {["4.5:1", "3:1", "2.5:1", "5:1"].map((option, index) => (
-            <button
-              key={index}
-              className="w-full cursor-pointer flex items-center p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
-            >
-              <span className="w-8 h-8 flex items-center justify-center bg-gray-600 text-white font-bold rounded mr-3">
-                {String.fromCharCode(65 + index)}
-              </span>
-              <span>{option}</span>
-            </button>
-          ))}
+        <div className="mt-6 grid gap-3">
+          {currentQuestion.options.map((option, index) => {
+            const active = selectedAnswer === option;
+
+            return (
+              <button
+                key={option}
+                onClick={() => selectOption(option)}
+                className={`flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-left transition sm:px-5 ${
+                  active
+                    ? "border-cyan-400 bg-cyan-500/10"
+                    : "border-slate-600 bg-slate-700/40 hover:bg-slate-700"
+                }`}
+              >
+                <span
+                  className={`flex h-8 w-8 items-center justify-center rounded-md text-sm font-bold ${
+                    active ? "bg-cyan-500 text-slate-900" : "bg-slate-600 text-slate-100"
+                  }`}
+                >
+                  {String.fromCharCode(65 + index)}
+                </span>
+                <span className="text-sm sm:text-base">{option}</span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Submit Button */}
-        <button className="w-full mt-4 p-3 cursor-pointer bg-purple-600 rounded-lg font-semibold hover:bg-purple-500 transition">
-          Submit answer
-        </button>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-between">
+          <button
+            onClick={goPrevious}
+            disabled={currentIndex === 0}
+            className="cursor-pointer rounded-lg border border-slate-600 px-4 py-3 font-semibold transition enabled:hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Anterior
+          </button>
+
+          <button
+            onClick={goNext}
+            disabled={!selectedAnswer}
+            className="cursor-pointer rounded-lg bg-cyan-500 px-5 py-3 font-semibold text-slate-900 transition enabled:hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {isLastQuestion ? "Finalizar quiz" : "Proxima pergunta"}
+          </button>
+        </div>
       </div>
     </div>
   );
