@@ -6,6 +6,7 @@ interface ResultState {
   quizId?: string;
   quizTitle?: string;
   answers?: Record<string, string>;
+  questionIds?: string[];
 }
 
 const QuizResult = () => {
@@ -17,6 +18,20 @@ const QuizResult = () => {
     () => quizData.find((quiz) => quiz.id === resultState.quizId),
     [resultState.quizId],
   );
+
+  const selectedQuestions = useMemo(() => {
+    if (!selectedQuiz) {
+      return [];
+    }
+
+    if (!resultState.questionIds || resultState.questionIds.length === 0) {
+      return selectedQuiz.questions;
+    }
+
+    return resultState.questionIds
+      .map((questionId) => selectedQuiz.questions.find((question) => question.id === questionId))
+      .filter((question) => question !== undefined);
+  }, [resultState.questionIds, selectedQuiz]);
 
   if (!selectedQuiz || !resultState.answers) {
     return (
@@ -35,8 +50,8 @@ const QuizResult = () => {
     );
   }
 
-  const totalQuestions = selectedQuiz.questions.length;
-  const score = selectedQuiz.questions.reduce((acc, question) => {
+  const totalQuestions = selectedQuestions.length;
+  const score = selectedQuestions.reduce((acc, question) => {
     return resultState.answers?.[question.id] === question.correctAnswer ? acc + 1 : acc;
   }, 0);
 
@@ -66,7 +81,7 @@ const QuizResult = () => {
         <div className="mt-8">
           <h2 className="text-xl font-semibold">Gabarito</h2>
           <div className="mt-4 space-y-4">
-            {selectedQuiz.questions.map((question, index) => {
+            {selectedQuestions.map((question, index) => {
               const answer = resultState.answers?.[question.id] || "Nao respondida";
               const isCorrect = answer === question.correctAnswer;
 

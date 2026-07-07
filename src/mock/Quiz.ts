@@ -1,79 +1,772 @@
-const quizData = [{
-    html: {
-      title: "HTML Quiz",
-      questions: [
-        {
-          question: "O que significa HTML?",
-          options: [
-            "Hyper Text Markup Language",
-            "High Tech Modern Language",
-            "Hyper Transfer Markup Language",
-            "Home Tool Markup Language"
-          ],
-          correctAnswer: "Hyper Text Markup Language"
-        },
-        {
-          question: "Qual elemento é usado para criar um link em HTML?",
-          options: ["<a>", "<link>", "<href>", "<button>"],
-          correctAnswer: "<a>"
-        },
-        {
-          question: "Qual tag é usada para criar um parágrafo?",
-          options: ["<p>", "<paragraph>", "<text>", "<pg>"],
-          correctAnswer: "<p>"
-        },
-        {
-          question: "Qual atributo é usado para definir uma imagem em HTML?",
-          options: ["src", "href", "alt", "id"],
-          correctAnswer: "src"
-        },
-        {
-          question: "Qual tag é usada para criar uma tabela em HTML?",
-          options: ["<table>", "<tab>", "<tr>", "<td>"],
-          correctAnswer: "<table>"
-        }
-      ]
+export interface QuizQuestionItem {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+}
+
+export interface QuizTheme {
+  id: string;
+  title: string;
+  description: string;
+  icon: "html" | "css" | "javascript" | "typescript" | "react" | "interview";
+  questions: QuizQuestionItem[];
+}
+
+const quizData: QuizTheme[] = [
+  {
+    id: "html",
+    title: "HTML",
+    description: "Semantica e estrutura da pagina",
+    icon: "html",
+    questions: [
+      {
+        id: "html-1",
+        question: "Qual elemento semantico representa a navegacao principal da pagina?",
+        options: ["<menu>", "<navigation>", "<nav>", "<header>"],
+        correctAnswer: "<nav>",
+      },
+      {
+        id: "html-2",
+        question: "Qual atributo melhora acessibilidade em imagens informativas?",
+        options: ["title", "alt", "name", "aria-label"],
+        correctAnswer: "alt",
+      },
+      {
+        id: "html-3",
+        question: "Qual tag representa o conteudo principal unico da pagina?",
+        options: ["<section>", "<main>", "<article>", "<aside>"],
+        correctAnswer: "<main>",
+      },
+      {
+        id: "html-4",
+        question: "Qual atributo em formularios vincula um label a um input?",
+        options: ["for", "name", "id", "target"],
+        correctAnswer: "for",
+      },
+      {
+        id: "html-5",
+        question: "Qual elemento e usado para incluir JavaScript externo?",
+        options: ["<js>", "<script>", "<javascript>", "<code>"],
+        correctAnswer: "<script>",
+      },
+      {
+        id: "html-6",
+        question: "Qual tag define uma lista nao ordenada?",
+        options: ["<ol>", "<list>", "<ul>", "<li>"],
+        correctAnswer: "<ul>",
+      },
+      {
+        id: "html-7",
+        question: "Qual atributo abre um link em nova aba?",
+        options: ["new", "target='_blank'", "open='new'", "rel='new'"],
+        correctAnswer: "target='_blank'",
+      },
+      {
+        id: "html-8",
+        question: "Qual elemento representa um item de lista?",
+        options: ["<ul>", "<li>", "<item>", "<list>"],
+        correctAnswer: "<li>",
+      },
+      {
+        id: "html-9",
+        question: "Qual tag semantica representa conteudo lateral complementar?",
+        options: ["<aside>", "<extra>", "<sidebar>", "<section>"],
+        correctAnswer: "<aside>",
+      },
+      {
+        id: "html-10",
+        question: "Qual declaracao deve aparecer no inicio de um documento HTML5?",
+        options: ["<!DOCTYPE html>", "<html5>", "<!HTML>", "<doctype html5>"],
+        correctAnswer: "<!DOCTYPE html>",
+      },
+       {
+      id: "html-11",
+      question: "Qual tag representa um cabecalho de uma pagina ou secao?",
+      options: ["<head>", "<header>", "<top>", "<heading>"],
+      correctAnswer: "<header>",
     },
-    css: {
-      title: "CSS Quiz",
-      questions: [
-        {
-          question: "O que significa CSS?",
-          options: [
-            "Computer Style Sheets",
-            "Cascading Style Sheets",
-            "Colorful Style Sheets",
-            "Creative Style System"
-          ],
-          correctAnswer: "Cascading Style Sheets"
-        },
-        {
-          question: "Qual propriedade do CSS é usada para alterar a cor do texto?",
-          options: ["text-color", "font-color", "color", "text-style"],
-          correctAnswer: "color"
-        },
-        {
-          question: "Qual propriedade do CSS é usada para definir a margem externa de um elemento?",
-          options: ["padding", "margin", "border", "spacing"],
-          correctAnswer: "margin"
-        },
-        {
-          question: "Como você aplica um estilo a um ID em CSS?",
-          options: ["#idName", ".idName", "idName{}", "*idName"],
-          correctAnswer: "#idName"
-        },
-        {
-          question: "Qual código é usado para tornar um texto em negrito no CSS?",
-          options: [
-            "text-weight: bold",
-            "font-bold: true",
-            "bold: yes",
-            "font-weight: bold"
-          ],
-          correctAnswer: "font-weight: bold"
-        }
-      ]
+    {
+      id: "html-12",
+      question: "Qual tag representa o rodape de uma pagina ou secao?",
+      options: ["<footer>", "<bottom>", "<foot>", "<end>"],
+      correctAnswer: "<footer>",
+    },
+    {
+      id: "html-13",
+      question: "Qual elemento representa uma secao independente de conteudo?",
+      options: ["<section>", "<group>", "<div>", "<block>"],
+      correctAnswer: "<section>",
+    },
+    {
+      id: "html-14",
+      question: "Qual elemento representa um conteudo autocontido?",
+      options: ["<article>", "<section>", "<div>", "<content>"],
+      correctAnswer: "<article>",
+    },
+    {
+      id: "html-15",
+      question: "Qual tag cria uma quebra de linha?",
+      options: ["<lb>", "<break>", "<br>", "<newline>"],
+      correctAnswer: "<br>",
+    },
+    {
+      id: "html-16",
+      question: "Qual tag cria uma linha horizontal?",
+      options: ["<line>", "<hr>", "<border>", "<separator>"],
+      correctAnswer: "<hr>",
+    },
+    {
+      id: "html-17",
+      question: "Qual elemento cria um paragrafo?",
+      options: ["<text>", "<paragraph>", "<p>", "<content>"],
+      correctAnswer: "<p>",
+    },
+    {
+      id: "html-18",
+      question: "Qual tag representa o maior nivel de titulo?",
+      options: ["<title>", "<h6>", "<h1>", "<header>"],
+      correctAnswer: "<h1>",
+    },
+    {
+      id: "html-19",
+      question: "Qual tag representa o menor nivel de titulo?",
+      options: ["<h5>", "<h6>", "<small>", "<subtitle>"],
+      correctAnswer: "<h6>",
+    },
+    {
+      id: "html-20",
+      question: "Qual atributo identifica unicamente um elemento?",
+      options: ["class", "id", "name", "key"],
+      correctAnswer: "id",
+    },
+    {
+      id: "html-21",
+      question: "Qual atributo permite aplicar uma ou mais classes CSS?",
+      options: ["style", "class", "css", "selector"],
+      correctAnswer: "class",
+    },
+    {
+      id: "html-22",
+      question: "Qual atributo define estilos inline?",
+      options: ["css", "class", "style", "design"],
+      correctAnswer: "style",
+    },
+    {
+      id: "html-23",
+      question: "Qual tag cria um link?",
+      options: ["<link>", "<a>", "<href>", "<url>"],
+      correctAnswer: "<a>",
+    },
+    {
+      id: "html-24",
+      question: "Qual atributo define o destino de um link?",
+      options: ["src", "target", "href", "link"],
+      correctAnswer: "href",
+    },
+    {
+      id: "html-25",
+      question: "Qual atributo define o caminho de uma imagem?",
+      options: ["href", "src", "path", "url"],
+      correctAnswer: "src",
+    },
+    {
+      id: "html-26",
+      question: "Qual tag insere uma imagem?",
+      options: ["<image>", "<img>", "<picture>", "<photo>"],
+      correctAnswer: "<img>",
+    },
+    {
+      id: "html-27",
+      question: "Qual tag cria uma tabela?",
+      options: ["<grid>", "<table>", "<tb>", "<sheet>"],
+      correctAnswer: "<table>",
+    },
+    {
+      id: "html-28",
+      question: "Qual tag representa uma linha da tabela?",
+      options: ["<td>", "<tr>", "<th>", "<row>"],
+      correctAnswer: "<tr>",
+    },
+    {
+      id: "html-29",
+      question: "Qual tag representa uma celula comum?",
+      options: ["<cell>", "<td>", "<tr>", "<th>"],
+      correctAnswer: "<td>",
+    },
+    {
+      id: "html-30",
+      question: "Qual tag representa uma celula de cabecalho?",
+      options: ["<thead>", "<header>", "<th>", "<td>"],
+      correctAnswer: "<th>",
+    },
+    {
+      id: "html-31",
+      question: "Qual tag agrupa o cabecalho da tabela?",
+      options: ["<thead>", "<header>", "<tbody>", "<tfoot>"],
+      correctAnswer: "<thead>",
+    },
+    {
+      id: "html-32",
+      question: "Qual tag agrupa o corpo da tabela?",
+      options: ["<body>", "<tbody>", "<tablebody>", "<rows>"],
+      correctAnswer: "<tbody>",
+    },
+    {
+      id: "html-33",
+      question: "Qual tag agrupa o rodape da tabela?",
+      options: ["<tfoot>", "<footer>", "<bottom>", "<endtable>"],
+      correctAnswer: "<tfoot>",
+    },
+    {
+      id: "html-34",
+      question: "Qual elemento cria um formulario?",
+      options: ["<input>", "<form>", "<fieldset>", "<data>"],
+      correctAnswer: "<form>",
+    },
+    {
+      id: "html-35",
+      question: "Qual elemento cria um campo de texto?",
+      options: ["<textbox>", "<input>", "<text>", "<field>"],
+      correctAnswer: "<input>",
+    },
+    {
+      id: "html-36",
+      question: "Qual atributo torna um campo obrigatorio?",
+      options: ["mandatory", "required", "validate", "need"],
+      correctAnswer: "required",
+    },
+    {
+      id: "html-37",
+      question: "Qual atributo define um texto de exemplo dentro do input?",
+      options: ["placeholder", "hint", "text", "example"],
+      correctAnswer: "placeholder",
+    },
+    {
+      id: "html-38",
+      question: "Qual atributo desabilita um campo?",
+      options: ["readonly", "disabled", "inactive", "block"],
+      correctAnswer: "disabled",
+    },
+    {
+      id: "html-39",
+      question: "Qual atributo permite apenas leitura?",
+      options: ["readonly", "disabled", "lock", "view"],
+      correctAnswer: "readonly",
+    },
+    {
+      id: "html-40",
+      question: "Qual elemento cria uma area de texto com varias linhas?",
+      options: ["<textarea>", "<input>", "<textbox>", "<text>"],
+      correctAnswer: "<textarea>",
+    },
+    {
+      id: "html-41",
+      question: "Qual elemento cria uma lista suspensa?",
+      options: ["<dropdown>", "<list>", "<select>", "<choice>"],
+      correctAnswer: "<select>",
+    },
+    {
+      id: "html-42",
+      question: "Qual elemento representa uma opcao de um select?",
+      options: ["<item>", "<choice>", "<option>", "<value>"],
+      correctAnswer: "<option>",
+    },
+    {
+      id: "html-43",
+      question: "Qual elemento cria um botao?",
+      options: ["<button>", "<btn>", "<click>", "<inputbutton>"],
+      correctAnswer: "<button>",
+    },
+    {
+      id: "html-44",
+      question: "Qual tipo de input cria uma caixa de selecao?",
+      options: ["radio", "checkbox", "toggle", "select"],
+      correctAnswer: "checkbox",
+    },
+    {
+      id: "html-45",
+      question: "Qual tipo de input permite selecionar apenas uma opcao?",
+      options: ["checkbox", "radio", "select", "single"],
+      correctAnswer: "radio",
+    },
+    {
+      id: "html-46",
+      question: "Qual tipo de input e utilizado para emails?",
+      options: ["mail", "email", "text", "address"],
+      correctAnswer: "email",
+    },
+    {
+      id: "html-47",
+      question: "Qual tipo de input e utilizado para senhas?",
+      options: ["hidden", "password", "secret", "secure"],
+      correctAnswer: "password",
+    },
+    {
+      id: "html-48",
+      question: "Qual tipo de input permite selecionar uma data?",
+      options: ["calendar", "date", "datetime", "day"],
+      correctAnswer: "date",
+    },
+    {
+      id: "html-49",
+      question: "Qual tipo de input permite enviar arquivos?",
+      options: ["upload", "file", "attachment", "document"],
+      correctAnswer: "file",
+    },
+    {
+      id: "html-50",
+      question: "Qual elemento incorpora um video?",
+      options: ["<movie>", "<media>", "<video>", "<player>"],
+      correctAnswer: "<video>",
+    },
+    {
+      id: "html-51",
+      question: "Qual elemento incorpora um audio?",
+      options: ["<sound>", "<music>", "<audio>", "<voice>"],
+      correctAnswer: "<audio>",
+    },
+    {
+      id: "html-52",
+      question: "Qual elemento incorpora outro documento HTML?",
+      options: ["<frame>", "<iframe>", "<embed>", "<window>"],
+      correctAnswer: "<iframe>",
+    },
+    {
+      id: "html-53",
+      question: "Qual elemento agrupa elementos sem significado semantico?",
+      options: ["<section>", "<article>", "<div>", "<group>"],
+      correctAnswer: "<div>",
+    },
+    {
+      id: "html-54",
+      question: "Qual elemento agrupa texto inline?",
+      options: ["<inline>", "<text>", "<span>", "<label>"],
+      correctAnswer: "<span>",
+    },
+    {
+      id: "html-55",
+      question: "Qual atributo especifica o idioma da pagina?",
+      options: ["locale", "language", "lang", "idiom"],
+      correctAnswer: "lang",
+    },
+    {
+      id: "html-56",
+      question: "Qual elemento define o titulo exibido na aba do navegador?",
+      options: ["<head>", "<meta>", "<title>", "<caption>"],
+      correctAnswer: "<title>",
+    },
+    {
+      id: "html-57",
+      question: "Onde a tag <title> deve ficar?",
+      options: ["<body>", "<footer>", "<head>", "<main>"],
+      correctAnswer: "<head>",
+    },
+    {
+      id: "html-58",
+      question: "Qual tag define metadados da pagina?",
+      options: ["<metadata>", "<meta>", "<data>", "<info>"],
+      correctAnswer: "<meta>",
+    },
+    {
+      id: "html-59",
+      question: "Qual atributo define a codificacao UTF-8?",
+      options: ["charset", "encoding", "lang", "code"],
+      correctAnswer: "charset",
+    },
+    {
+      id: "html-60",
+      question: "Qual elemento e utilizado para destacar texto importante?",
+      options: ["<important>", "<strong>", "<bold>", "<b>"],
+      correctAnswer: "<strong>",
     }
-  }];
-  
-  export default quizData;
+    ],
+  },
+  {
+    id: "css",
+    title: "CSS",
+    description: "Layout, responsividade e especificidade",
+    icon: "css",
+    questions: [
+      {
+        id: "css-1",
+        question: "Qual unidade e recomendada para fonte responsiva baseada no root?",
+        options: ["px", "em", "rem", "%"],
+        correctAnswer: "rem",
+      },
+      {
+        id: "css-2",
+        question: "Qual propriedade cria um container flexivel?",
+        options: ["display: block", "display: grid", "display: flex", "position: flex"],
+        correctAnswer: "display: flex",
+      },
+      {
+        id: "css-3",
+        question: "Qual media query mira telas com largura ate 768px?",
+        options: [
+          "@media (width >= 768px)",
+          "@media (max-width: 768px)",
+          "@media screen and (height: 768px)",
+          "@media (device: mobile)",
+        ],
+        correctAnswer: "@media (max-width: 768px)",
+      },
+      {
+        id: "css-4",
+        question: "Qual propriedade controla o espacamento interno de um elemento?",
+        options: ["margin", "padding", "gap", "spacing"],
+        correctAnswer: "padding",
+      },
+      {
+        id: "css-5",
+        question: "Qual seletor aplica estilo para classe chamada card?",
+        options: ["#card", "card", ".card", "*card"],
+        correctAnswer: ".card",
+      },
+      {
+        id: "css-6",
+        question: "Qual propriedade define cantos arredondados?",
+        options: ["corner-radius", "border-round", "border-radius", "radius"],
+        correctAnswer: "border-radius",
+      },
+      {
+        id: "css-7",
+        question: "No Flexbox, qual propriedade alinha itens no eixo principal?",
+        options: ["align-items", "justify-content", "align-content", "place-items"],
+        correctAnswer: "justify-content",
+      },
+      {
+        id: "css-8",
+        question: "Qual valor de position remove o elemento do fluxo normal?",
+        options: ["relative", "static", "absolute", "inherit"],
+        correctAnswer: "absolute",
+      },
+      {
+        id: "css-9",
+        question: "Qual propriedade altera a cor de fundo?",
+        options: ["background-color", "color", "fill", "bg-color"],
+        correctAnswer: "background-color",
+      },
+      {
+        id: "css-10",
+        question: "Qual funcao cria layout em colunas e linhas de forma bidimensional?",
+        options: ["Flexbox", "Grid", "Float", "Inline-block"],
+        correctAnswer: "Grid",
+      },
+    ],
+  },
+  {
+    id: "javascript",
+    title: "JavaScript",
+    description: "Logica, assincronia e estruturas",
+    icon: "javascript",
+    questions: [
+      {
+        id: "js-1",
+        question: "Qual metodo transforma um array em outro array?",
+        options: ["forEach", "map", "find", "some"],
+        correctAnswer: "map",
+      },
+      {
+        id: "js-2",
+        question: "Qual palavra-chave pausa uma funcao async?",
+        options: ["wait", "pause", "await", "yield"],
+        correctAnswer: "await",
+      },
+      {
+        id: "js-3",
+        question: "Qual estrutura e melhor para pares chave-valor com chave string?",
+        options: ["Array", "Map", "Object", "Set"],
+        correctAnswer: "Object",
+      },
+      {
+        id: "js-4",
+        question: "Qual metodo converte objeto JSON em objeto JavaScript?",
+        options: ["JSON.toObject", "JSON.parse", "JSON.stringify", "Object.fromJSON"],
+        correctAnswer: "JSON.parse",
+      },
+      {
+        id: "js-5",
+        question: "Qual operador compara valor e tipo ao mesmo tempo?",
+        options: ["==", "=", "===", "!="],
+        correctAnswer: "===",
+      },
+      {
+        id: "js-6",
+        question: "Qual metodo adiciona item no fim do array?",
+        options: ["shift", "unshift", "push", "concatOne"],
+        correctAnswer: "push",
+      },
+      {
+        id: "js-7",
+        question: "Qual estrutura trata excecoes em JavaScript?",
+        options: ["if/catch", "try/catch", "guard/error", "throw/catch/final"],
+        correctAnswer: "try/catch",
+      },
+      {
+        id: "js-8",
+        question: "Qual metodo interrompe iteracao ao encontrar o primeiro elemento valido?",
+        options: ["map", "filter", "find", "reduce"],
+        correctAnswer: "find",
+      },
+      {
+        id: "js-9",
+        question: "Qual objeto da Web API permite requisicoes HTTP modernas?",
+        options: ["XMLHttp", "request", "fetch", "httpClient"],
+        correctAnswer: "fetch",
+      },
+      {
+        id: "js-10",
+        question: "Qual metodo transforma array em string com separador?",
+        options: ["split", "join", "concat", "toText"],
+        correctAnswer: "join",
+      },
+    ],
+  },
+  {
+    id: "typescript",
+    title: "TypeScript",
+    description: "Tipagem estatica para apps robustos",
+    icon: "typescript",
+    questions: [
+      {
+        id: "ts-1",
+        question: "Qual recurso evita passar tipos como any em funcoes?",
+        options: ["Decorators", "Generics", "Namespaces", "Mixins"],
+        correctAnswer: "Generics",
+      },
+      {
+        id: "ts-2",
+        question: "Qual utilitario torna todas as propriedades opcionais?",
+        options: ["Required<T>", "Readonly<T>", "Partial<T>", "Pick<T>"],
+        correctAnswer: "Partial<T>",
+      },
+      {
+        id: "ts-3",
+        question: "Qual palavra define um tipo uniao?",
+        options: ["&", "=>", "|", "?"],
+        correctAnswer: "|",
+      },
+      {
+        id: "ts-4",
+        question: "Qual keyword define um tipo customizado nomeado?",
+        options: ["interface", "type", "class", "enum"],
+        correctAnswer: "type",
+      },
+      {
+        id: "ts-5",
+        question: "Qual utilitario seleciona apenas algumas propriedades de um tipo?",
+        options: ["Omit<T>", "Record<K, T>", "Pick<T, K>", "Extract<T, U>"],
+        correctAnswer: "Pick<T, K>",
+      },
+      {
+        id: "ts-6",
+        question: "Qual utilitario remove propriedades de um tipo?",
+        options: ["Exclude<T>", "Omit<T, K>", "Drop<T>", "Remove<T>"],
+        correctAnswer: "Omit<T, K>",
+      },
+      {
+        id: "ts-7",
+        question: "Qual keyword define membros de somente leitura em classes?",
+        options: ["const", "readonly", "immutable", "final"],
+        correctAnswer: "readonly",
+      },
+      {
+        id: "ts-8",
+        question: "Qual opcao de compilador melhora seguranca para nulos e indefinidos?",
+        options: ["strictNullChecks", "noAny", "safeMode", "nullGuard"],
+        correctAnswer: "strictNullChecks",
+      },
+      {
+        id: "ts-9",
+        question: "Qual tipo representa uma funcao que nunca retorna?",
+        options: ["void", "undefined", "never", "null"],
+        correctAnswer: "never",
+      },
+      {
+        id: "ts-10",
+        question: "Qual keyword garante checagem de tipo em tempo de compilacao para classes e interfaces?",
+        options: ["extends", "satisfies", "implements", "instanceof"],
+        correctAnswer: "implements",
+      },
+    ],
+  },
+  {
+    id: "react",
+    title: "React",
+    description: "Componentes, estado e renderizacao",
+    icon: "react",
+    questions: [
+      {
+        id: "react-1",
+        question: "Qual hook guarda estado local no componente?",
+        options: ["useMemo", "useState", "useRef", "useContext"],
+        correctAnswer: "useState",
+      },
+      {
+        id: "react-2",
+        question: "Qual prop deve ser unica ao renderizar listas?",
+        options: ["id", "name", "key", "index"],
+        correctAnswer: "key",
+      },
+      {
+        id: "react-3",
+        question: "Quando useEffect sem dependencias e executado?",
+        options: [
+          "A cada render",
+          "Apenas ao montar",
+          "Apenas ao desmontar",
+          "Nunca",
+        ],
+        correctAnswer: "Apenas ao montar",
+      },
+      {
+        id: "react-4",
+        question: "Qual hook memoriza um valor calculado?",
+        options: ["useState", "useCallback", "useMemo", "useEffect"],
+        correctAnswer: "useMemo",
+      },
+      {
+        id: "react-5",
+        question: "Qual hook cria referencia mutavel sem causar re-render?",
+        options: ["useRef", "useReducer", "useLayout", "useMutable"],
+        correctAnswer: "useRef",
+      },
+      {
+        id: "react-6",
+        question: "Qual tecnica evita prop drilling em arvores profundas?",
+        options: ["memo", "Context API", "Portals", "Fragments"],
+        correctAnswer: "Context API",
+      },
+      {
+        id: "react-7",
+        question: "Qual metodo e usado para renderizar listas com transformacao?",
+        options: ["forEach", "map", "filter", "reduce"],
+        correctAnswer: "map",
+      },
+      {
+        id: "react-8",
+        question: "Qual nome se da ao processo de atualizar UI apos mudanca de estado?",
+        options: ["Hydration", "Re-render", "Compilation", "SSR"],
+        correctAnswer: "Re-render",
+      },
+      {
+        id: "react-9",
+        question: "Qual hook e recomendado para logica de estado mais complexa?",
+        options: ["useReducer", "useRef", "useId", "useMemo"],
+        correctAnswer: "useReducer",
+      },
+      {
+        id: "react-10",
+        question: "Qual recurso permite renderizar filhos fora da hierarquia DOM pai?",
+        options: ["Suspense", "Portals", "StrictMode", "Concurrent"],
+        correctAnswer: "Portals",
+      },
+    ],
+  },
+  {
+    id: "interview",
+    title: "Entrevistas",
+    description: "Perguntas comuns em entrevistas frontend",
+    icon: "interview",
+    questions: [
+      {
+        id: "interview-1",
+        question: "Como voce explicaria a diferenca entre var, let e const?",
+        options: [
+          "Nao ha diferenca pratica",
+          "Escopo e mutabilidade diferentes",
+          "Apenas nome diferente",
+          "const e mais rapido sempre",
+        ],
+        correctAnswer: "Escopo e mutabilidade diferentes",
+      },
+      {
+        id: "interview-2",
+        question: "Quando voce usaria React Context em vez de props?",
+        options: [
+          "Sempre",
+          "Nunca",
+          "Quando muitos niveis precisam do mesmo dado",
+          "Apenas para estilos",
+        ],
+        correctAnswer: "Quando muitos niveis precisam do mesmo dado",
+      },
+      {
+        id: "interview-3",
+        question: "Qual abordagem ajuda a melhorar performance de listas grandes?",
+        options: ["Virtualizacao", "Mais useEffect", "setInterval", "Inline styles"],
+        correctAnswer: "Virtualizacao",
+      },
+      {
+        id: "interview-4",
+        question: "Como evitar re-render desnecessario em componentes React?",
+        options: ["memoizacao com React.memo e useMemo", "Adicionar mais estados", "Mutar props", "Remover keys"],
+        correctAnswer: "memoizacao com React.memo e useMemo",
+      },
+      {
+        id: "interview-5",
+        question: "Qual pratica melhora acessibilidade em formularios?",
+        options: ["Placeholder sem label", "Labels associadas e mensagens de erro claras", "Apenas cores", "Remover foco visual"],
+        correctAnswer: "Labels associadas e mensagens de erro claras",
+      },
+      {
+        id: "interview-6",
+        question: "O que e mobile-first em CSS?",
+        options: [
+          "Criar layout primeiro para desktop",
+          "Comecar pelos menores breakpoints e escalar",
+          "Usar apenas media query max-width",
+          "Evitar responsividade",
+        ],
+        correctAnswer: "Comecar pelos menores breakpoints e escalar",
+      },
+      {
+        id: "interview-7",
+        question: "Qual a diferenca entre localStorage e sessionStorage?",
+        options: [
+          "Sao iguais",
+          "localStorage persiste alem da sessao, sessionStorage nao",
+          "sessionStorage e no servidor",
+          "localStorage expira em 5 minutos",
+        ],
+        correctAnswer: "localStorage persiste alem da sessao, sessionStorage nao",
+      },
+      {
+        id: "interview-8",
+        question: "Qual estrategia e boa para consumir API no frontend moderno?",
+        options: [
+          "fetch/axios com tratamento de loading e erro",
+          "Apenas console.log",
+          "Sempre sync request",
+          "Executar request dentro de render",
+        ],
+        correctAnswer: "fetch/axios com tratamento de loading e erro",
+      },
+      {
+        id: "interview-9",
+        question: "O que e code splitting no contexto de React?",
+        options: [
+          "Dividir CSS em arquivos",
+          "Carregar partes do bundle sob demanda",
+          "Quebrar um componente em funcoes pequenas apenas",
+          "Minificar HTML",
+        ],
+        correctAnswer: "Carregar partes do bundle sob demanda",
+      },
+      {
+        id: "interview-10",
+        question: "Qual resposta demonstra boa postura sobre testes em frontend?",
+        options: [
+          "Nao precisa testar UI",
+          "Priorizar testes de comportamento critico com unitarios e integracao",
+          "Apenas snapshots sempre",
+          "Testar so no final do projeto",
+        ],
+        correctAnswer: "Priorizar testes de comportamento critico com unitarios e integracao",
+      },
+    ],
+  },
+];
+
+export default quizData;

@@ -1,6 +1,19 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import quizData from "../mock/Quiz";
+import quizData, { type QuizQuestionItem } from "../mock/Quiz";
+
+const QUIZ_QUESTION_LIMIT = 10;
+
+const shuffleQuestions = (questions: QuizQuestionItem[]) => {
+  const shuffled = [...questions];
+
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[i]];
+  }
+
+  return shuffled;
+};
 
 const QuizQuestion = () => {
   const { id } = useParams();
@@ -9,6 +22,22 @@ const QuizQuestion = () => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
   const selectedQuiz = useMemo(() => quizData.find((item) => item.id === id), [id]);
+
+  const quizQuestions = useMemo(() => {
+    if (!selectedQuiz) {
+      return [];
+    }
+
+    return shuffleQuestions(selectedQuiz.questions).slice(
+      0,
+      Math.min(QUIZ_QUESTION_LIMIT, selectedQuiz.questions.length),
+    );
+  }, [selectedQuiz]);
+
+  useEffect(() => {
+    setCurrentIndex(0);
+    setAnswers({});
+  }, [id]);
 
   if (!selectedQuiz) {
     return (
@@ -26,8 +55,24 @@ const QuizQuestion = () => {
     );
   }
 
-  const currentQuestion = selectedQuiz.questions[currentIndex];
-  const totalQuestions = selectedQuiz.questions.length;
+  if (quizQuestions.length === 0) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-900 px-4 text-slate-100">
+        <div className="w-full max-w-md rounded-xl bg-slate-800 p-6 text-center">
+          <h1 className="text-2xl font-bold">Este tema nao possui perguntas</h1>
+          <button
+            onClick={() => navigate("/")}
+            className="mt-4 cursor-pointer rounded-lg bg-cyan-500 px-4 py-2 font-semibold text-slate-900"
+          >
+            Voltar para inicio
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const currentQuestion = quizQuestions[currentIndex];
+  const totalQuestions = quizQuestions.length;
   const progress = ((currentIndex + 1) / totalQuestions) * 100;
   const selectedAnswer = answers[currentQuestion.id];
   const isLastQuestion = currentIndex === totalQuestions - 1;
@@ -50,6 +95,7 @@ const QuizQuestion = () => {
           quizId: selectedQuiz.id,
           quizTitle: selectedQuiz.title,
           answers,
+          questionIds: quizQuestions.map((question) => question.id),
         },
       });
       return;
