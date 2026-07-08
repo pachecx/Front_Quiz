@@ -1,5 +1,3 @@
-import { FaHtml5, FaCss3Alt, FaJs, FaUniversalAccess } from "react-icons/fa";
-
 interface typeQuestion{
   nome: string,
 }
